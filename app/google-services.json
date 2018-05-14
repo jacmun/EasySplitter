@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1090537168315",
+    "firebase_url": "https://easysplitter-ed193.firebaseio.com",
+    "project_id": "easysplitter-ed193",
+    "storage_bucket": "easysplitter-ed193.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1090537168315:android:f2f67fe3cb4f7f04",
+        "android_client_info": {
+          "package_name": "com.example.jackiemun1.easysplitter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1090537168315-ec2buvcc1rd4tn5o0qltlvid02c4064i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.jackiemun1.easysplitter",
+            "certificate_hash": "2783c3dbf688c4953ea31ebedd897269b3706077"
+          }
+        },
+        {
+          "client_id": "1090537168315-qmhjlqkj8rmn2j8sdovbp4gro4o9b1gu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClm-oYL_wa4Oi-Q5RP_vkfhusuBwR3xC0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1090537168315-qmhjlqkj8rmn2j8sdovbp4gro4o9b1gu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

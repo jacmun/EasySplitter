@@ -20,7 +20,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements CreateUserDialog.UserHandler {
+
+    public static final String KEY_EDIT = "KEY_EDIT";
 
     @BindView(R.id.etEmail)
     EditText etEmail;
@@ -39,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth=FirebaseAuth.getInstance();
     }
 
-    @OnClick(R.id.btnRegister)
+    @OnClick(R.id.btnFinnishRegUser)
     void registerClicked(){
         if (!isFormValid()){
             return;
