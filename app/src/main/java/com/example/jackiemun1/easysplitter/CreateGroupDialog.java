@@ -15,9 +15,7 @@ import android.widget.EditText;
 public class CreateGroupDialog extends DialogFragment {
 
     public interface GroupHandler {
-        //public void onNewGroupCreated(Group group);
-
-        //public void onGroupUpdated(Group group);
+        public void onNewGroupCreated(String groupName);
     }
 
     private CreateGroupDialog.GroupHandler groupHandler;
@@ -44,13 +42,6 @@ public class CreateGroupDialog extends DialogFragment {
 
         etRegGroupId = rootView.findViewById(R.id.etRegGroupId);
 
-        if (getArguments() != null &&
-                getArguments().containsKey(LoginActivity.KEY_EDIT)) {
-            //User userToEdit = (User) getArguments().getSerializable(LoginActivity.KEY_EDIT);
-            //etRegEmail.setText(userToEdit.getUserName());
-
-        }
-
         builder.setView(rootView);
 
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
@@ -73,19 +64,7 @@ public class CreateGroupDialog extends DialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (!TextUtils.isEmpty(etRegGroupId.getText())) {
-                        if (getArguments() != null &&
-                                getArguments().containsKey(LoginActivity.KEY_EDIT)) {
-                            //User userToEdit = (User) getArguments().getSerializable(LoginActivity.KEY_EDIT);
-                            //userToEdit.setUserName(etRegEmail.getText().toString());
-                            //userHandler.onUserUpdated(userToEdit);
-                        } else {
-                            //User user = new User(
-                            //etRegEmail.getText().toString()
-                            //);
-
-                            //userHandler.onNewUserCreated(user);
-                        }
-
+                        groupHandler.onNewGroupCreated(etRegGroupId.getText().toString());
                         d.dismiss();
 
                     } else {

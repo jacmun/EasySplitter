@@ -2,6 +2,7 @@ package com.example.jackiemun1.easysplitter;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -13,17 +14,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+
 public class CreateUserDialog extends DialogFragment {
 
     public interface UserHandler {
-        //public void onNewUserCreated(User user);
-
-        //public void onUserUpdated(User user);
+        public void initNewUser(String email, String password);
     }
 
     private UserHandler userHandler;
     private EditText etRegEmail;
     private EditText etRegPassword;
+
 
     @Override
     public void onAttach(Context context) {
@@ -46,13 +47,6 @@ public class CreateUserDialog extends DialogFragment {
 
         etRegEmail = rootView.findViewById(R.id.etRegEmail);
         etRegPassword = rootView.findViewById(R.id.etRegPassword);
-
-        if (getArguments() != null &&
-                getArguments().containsKey(LoginActivity.KEY_EDIT)) {
-            //User userToEdit = (User) getArguments().getSerializable(LoginActivity.KEY_EDIT);
-            //etRegEmail.setText(userToEdit.getUserName());
-
-        }
 
         builder.setView(rootView);
 
@@ -80,22 +74,9 @@ public class CreateUserDialog extends DialogFragment {
                     }
                     if (TextUtils.isEmpty(etRegPassword.getText())) {
                         etRegPassword.setError("This field cannot be empty");
-                    }
-                    else if (!TextUtils.isEmpty(etRegEmail.getText()) &&
-                            !TextUtils.isEmpty(etRegPassword.getText())) {
-                        if (getArguments() != null &&
-                                getArguments().containsKey(LoginActivity.KEY_EDIT)) {
-                            //User userToEdit = (User) getArguments().getSerializable(LoginActivity.KEY_EDIT);
-                            //userToEdit.setUserName(etRegEmail.getText().toString());
-                            //userHandler.onUserUpdated(userToEdit);
-                        } else {
-                            //User user = new User(
-                                    //etRegEmail.getText().toString()
-                            //);
-
-                            //userHandler.onNewUserCreated(user);
-                        }
-
+                    } else {
+                        userHandler.initNewUser(etRegEmail.getText().toString(),
+                                etRegPassword.getText().toString());
                         d.dismiss();
                     }
                 }
