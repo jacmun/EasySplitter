@@ -74,14 +74,34 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
         ).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+                hideProgressDialog();
                 if(task.isSuccessful()){
-                    Intent intentMain = new Intent();
-                    intentMain.setClass(LoginActivity.this, MainActivity.class);
-                    intentMain.putExtra("GROUP_NAME", etGroupId.getText().toString());
-                    startActivity(intentMain);
+                    final String groupName = etGroupId.getText().toString();
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("groups");
+
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.child(groupName).exists()){
+                                Intent intentMain = new Intent();
+                                intentMain.setClass(LoginActivity.this, MainActivity.class);
+                                intentMain.putExtra("GROUP_NAME", groupName);
+                                startActivity(intentMain);
+                            }
+                            else{
+                                Toast.makeText(LoginActivity.this, "Group does not exist", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
                 else{
-                    Toast.makeText(LoginActivity.this, "Error:" + task.getException().getMessage(),
+                    Toast.makeText(LoginActivity.this, "Error: " + task.getException().getMessage(),
                             Toast.LENGTH_SHORT).show();
                 }
             }
