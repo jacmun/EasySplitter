@@ -20,7 +20,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends AppCompatActivity implements CreateUserDialog.UserHandler {
+public class LoginActivity extends AppCompatActivity implements CreateUserDialog.UserHandler,
+        CreateGroupDialog.GroupHandler{
 
     public static final String KEY_EDIT = "KEY_EDIT";
 
@@ -41,36 +42,43 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
         firebaseAuth=FirebaseAuth.getInstance();
     }
 
-    @OnClick(R.id.btnFinnishRegUser)
+    @OnClick(R.id.btnRegisterUser)
     void registerClicked(){
-        if (!isFormValid()){
-            return;
-        }
+        showRegisterUserDialog();
 
-        showProgressDialog();
+//        if (!isFormValid()){
+//            return;
+//        }
+//
+//        showProgressDialog();
+//
+//
+//        firebaseAuth.createUserWithEmailAndPassword(
+//                etEmail.getText().toString(),
+//                etPassword.getText().toString()
+//        ).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//            @Override
+//            public void onComplete(@NonNull Task<AuthResult> task) {
+//                hideProgressDialog();
+//                if(task.isSuccessful()) {
+//                    FirebaseUser fbUser = task.getResult().getUser();
+//
+//                    fbUser.updateProfile(new UserProfileChangeRequest.Builder().
+//                            setDisplayName(usernameFromEmail(fbUser.getEmail())).build());
+//
+//                    Toast.makeText(LoginActivity.this, "User created", Toast.LENGTH_SHORT).show();
+//                } else{
+//                    Toast.makeText(LoginActivity.this,
+//                            task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                }
+//
+//            }
+//        });
+    }
 
-
-        firebaseAuth.createUserWithEmailAndPassword(
-                etEmail.getText().toString(),
-                etPassword.getText().toString()
-        ).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                hideProgressDialog();
-                if(task.isSuccessful()) {
-                    FirebaseUser fbUser = task.getResult().getUser();
-
-                    fbUser.updateProfile(new UserProfileChangeRequest.Builder().
-                            setDisplayName(usernameFromEmail(fbUser.getEmail())).build());
-
-                    Toast.makeText(LoginActivity.this, "User created", Toast.LENGTH_SHORT).show();
-                } else{
-                    Toast.makeText(LoginActivity.this,
-                            task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
+    @OnClick(R.id.btnRegisterGroup)
+    void registerGroupClicked() {
+        showRegisterGroupDialog();
     }
 
     @OnClick(R.id.btnLogin)
@@ -110,6 +118,14 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
             return false;
         }
         return true;
+    }
+
+    private void showRegisterUserDialog() {
+        new CreateUserDialog().show(getFragmentManager(), "RegisterUserDialog");
+    }
+
+    private void showRegisterGroupDialog() {
+        new CreateGroupDialog().show(getFragmentManager(), "RegisterGroupDialog");
     }
 
 
