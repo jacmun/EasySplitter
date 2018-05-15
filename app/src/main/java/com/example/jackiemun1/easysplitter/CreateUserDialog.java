@@ -75,7 +75,14 @@ public class CreateUserDialog extends DialogFragment {
             positiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!TextUtils.isEmpty(etRegEmail.getText())) {
+                    if (TextUtils.isEmpty(etRegEmail.getText())) {
+                        etRegEmail.setError("This field cannot be empty");
+                    }
+                    if (TextUtils.isEmpty(etRegPassword.getText())) {
+                        etRegPassword.setError("This field cannot be empty");
+                    }
+                    else if (!TextUtils.isEmpty(etRegEmail.getText()) &&
+                            !TextUtils.isEmpty(etRegPassword.getText())) {
                         if (getArguments() != null &&
                                 getArguments().containsKey(LoginActivity.KEY_EDIT)) {
                             //User userToEdit = (User) getArguments().getSerializable(LoginActivity.KEY_EDIT);
@@ -90,11 +97,7 @@ public class CreateUserDialog extends DialogFragment {
                         }
 
                         d.dismiss();
-
-                    } else {
-                        etRegEmail.setError("This field cannot be empty");
                     }
-
                 }
             });
         }
