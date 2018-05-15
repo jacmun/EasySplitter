@@ -133,28 +133,21 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
 
     }
 
-    public void onNewGroupCreated(final String groupName){
+    public void onNewGroupCreated(final String groupName,final int groupNumber){
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("groups");
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.child(groupName).exists()){
+                if (dataSnapshot.child(groupName).exists()) {
                     Toast.makeText(LoginActivity.this, "Group ID already taken", Toast.LENGTH_SHORT).show();
-                }
-                else{
+                } else {
                     Log.d("CREATE_GROUP", "here");
-                    String key = FirebaseDatabase.getInstance().getReference().child("groups").child(groupName).push().getKey();
-                    Transaction newTransaction = new Transaction(
-                            0, "test", FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
-                            FirebaseAuth.getInstance().getCurrentUser().getUid()
-                    );
-
-                    FirebaseDatabase.getInstance().getReference().child("groups").child(groupName).child(key).setValue(newTransaction);
+                    FirebaseDatabase.getInstance().getReference().child("groups").
+                            child(groupName).child("group members").setValue(groupNumber);
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 

@@ -15,11 +15,12 @@ import android.widget.EditText;
 public class CreateGroupDialog extends DialogFragment {
 
     public interface GroupHandler {
-        public void onNewGroupCreated(String groupName);
+        public void onNewGroupCreated(String groupName, int groupNumber);
     }
 
     private CreateGroupDialog.GroupHandler groupHandler;
     private EditText etRegGroupId;
+    private EditText etRegGroupNumber;
 
     @Override
     public void onAttach(Context context) {
@@ -41,6 +42,7 @@ public class CreateGroupDialog extends DialogFragment {
         View rootView = getActivity().getLayoutInflater().inflate(R.layout.dialogue_register_group, null);
 
         etRegGroupId = rootView.findViewById(R.id.etRegGroupId);
+        etRegGroupId = rootView.findViewById(R.id.etRegGroupNumber);
 
         builder.setView(rootView);
 
@@ -64,7 +66,13 @@ public class CreateGroupDialog extends DialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (!TextUtils.isEmpty(etRegGroupId.getText())) {
-                        groupHandler.onNewGroupCreated(etRegGroupId.getText().toString());
+                        if(TextUtils.isEmpty(etRegGroupNumber.getText())){
+                            groupHandler.onNewGroupCreated(etRegGroupId.getText().toString(), 1);
+                        }
+                        else {
+                            int groupNumber = Integer.parseInt(etRegGroupNumber.getText().toString());
+                            groupHandler.onNewGroupCreated(etRegGroupId.getText().toString(), groupNumber);
+                        }
                         d.dismiss();
 
                     } else {
