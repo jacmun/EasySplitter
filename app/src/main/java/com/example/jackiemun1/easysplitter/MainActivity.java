@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 groupNumber = dataSnapshot.getValue(Integer.class);
-                System.out.print(groupNumber);
+                tvNumberOfMembers.setText("Number of members in group: "+ groupNumber);
             }
 
             @Override
