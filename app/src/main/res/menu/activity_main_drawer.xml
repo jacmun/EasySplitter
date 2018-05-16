@@ -9,4 +9,10 @@
         android:title="Logout"
         />
 
+    <item
+        android:id="@+id/nav_about"
+        android:icon="@android:drawable/ic_menu_help"
+        android:title="About"
+        />
+
 </menu>

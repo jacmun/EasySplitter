@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.jackiemun1.easysplitter.adapter.TransactionsAdapter;
@@ -33,13 +34,21 @@ public class MainActivity extends AppCompatActivity
 
     private TransactionsAdapter transactionsAdapter;
     private String group;
+    private DrawerLayout drawerLayout;
+    private TextView tvUserDisplayName;
+    private TextView tvUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        tvUserDisplayName = findViewById(R.id.tvUserDisplayName);
+        tvUserID = findViewById(R.id.tvUserID);
+        drawerLayout = findViewById(R.id.drawer_layout);
+
         group = getIntent().getStringExtra("GROUP_NAME");
+        setTitle(group);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -130,6 +139,9 @@ public class MainActivity extends AppCompatActivity
             FirebaseAuth.getInstance().signOut();
             finish();
         }
+        if (id == R.id.nav_about) {
+            showSnackBarMessage("HariniPoo & JackiePoo");
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -145,8 +157,20 @@ public class MainActivity extends AppCompatActivity
                 addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(MainActivity.this, "Post created", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Transaction created", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showSnackBarMessage(String message) {
+        Snackbar.make(drawerLayout,
+                message,
+                Snackbar.LENGTH_LONG
+        ).setAction("Hide", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //...
+            }
+        }).show();
     }
 }

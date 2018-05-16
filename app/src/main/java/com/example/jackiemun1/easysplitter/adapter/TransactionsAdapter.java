@@ -48,9 +48,9 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.tvBuyer.setText(
                 transactionList.get(holder.getAdapterPosition()).getBuyer());
-        holder.tvDescription.setText(
+        holder.tvDescription.setText("Description: " +
                 transactionList.get(holder.getAdapterPosition()).getDescription());
-        holder.tvPrice.setText("$" +
+        holder.tvPrice.setText("Price: $" +
                 transactionList.get(holder.getAdapterPosition()).getPrice());
 
         if (transactionList.get(holder.getAdapterPosition()).getUid().equals(uId)) {
