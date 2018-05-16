@@ -117,7 +117,6 @@ public class MainActivity extends AppCompatActivity
                 transactionsAdapter.addTransaction(newTransaction, dataSnapshot.getKey());
                 double totalExpenses = transactionsAdapter.totalExpenses();
                 double splitExpense = Math.ceil(totalExpenses/groupNumber*100)/100;
-                tvNumberOfMembers.setText("Number of members in group: "+ groupNumber);
                 tvTotalExpense.setText("Total expense: $" + String.format("%.2f",totalExpenses));
                 tvTotalPerMember.setText("Amount each person needs to pay: $" +
                         String.format("%.2f", splitExpense));
@@ -133,7 +132,6 @@ public class MainActivity extends AppCompatActivity
                 transactionsAdapter.removeTransactionByKey(dataSnapshot.getKey());
                 double totalExpenses = transactionsAdapter.totalExpenses();
                 double splitExpense = Math.ceil(totalExpenses/groupNumber*1000)/1000;
-                tvNumberOfMembers.setText("Number of members in group: "+ groupNumber);
                 tvTotalExpense.setText("Total expense: $" + String.format("%.2f",totalExpenses));
                 tvTotalPerMember.setText("Amount each person needs to pay: $" +
                         String.format("%.2f", splitExpense));
