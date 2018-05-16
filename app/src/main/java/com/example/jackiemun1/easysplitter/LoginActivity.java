@@ -77,18 +77,18 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
                 if(task.isSuccessful()){
                     final String groupName = etGroupId.getText().toString();
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("groups");
-
                     ref.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            hideProgressDialog();
                             if(dataSnapshot.child(groupName).exists()){
+                                hideProgressDialog();
                                 Intent intentMain = new Intent();
                                 intentMain.setClass(LoginActivity.this, MainActivity.class);
                                 intentMain.putExtra("GROUP_NAME", groupName);
                                 startActivity(intentMain);
                             }
                             else{
+                                hideProgressDialog();
                                 Toast.makeText(LoginActivity.this, "Group does not exist", Toast.LENGTH_SHORT).show();
                             }
                         }

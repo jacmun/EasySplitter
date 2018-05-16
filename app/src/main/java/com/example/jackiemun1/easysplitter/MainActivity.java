@@ -28,6 +28,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, NewTransactionDialog.TransactionHandler {
@@ -37,6 +38,10 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawerLayout;
     private TextView tvUserDisplayName;
     private TextView tvUserID;
+    private TextView tvNumberOfMembers;
+    private TextView tvTotalExpense;
+    private TextView tvTotalPerMember;
+    private int groupNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +84,24 @@ public class MainActivity extends AppCompatActivity
         recyclerViewTransactions.setLayoutManager(layoutManager);
         recyclerViewTransactions.setAdapter(transactionsAdapter);
 
+        tvNumberOfMembers = findViewById(R.id.tvNumberOfMembers);
+        tvTotalExpense = findViewById(R.id.tvTotalExpense);
+        tvTotalPerMember = findViewById(R.id.tvTotalPerMember);
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("groups").child(group).
+                child("group members");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                groupNumber = dataSnapshot.getValue(Integer.class);
+                System.out.print(groupNumber);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         initTransactions();
     }
@@ -92,6 +115,12 @@ public class MainActivity extends AppCompatActivity
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Transaction newTransaction = dataSnapshot.getValue(Transaction.class);
                 transactionsAdapter.addTransaction(newTransaction, dataSnapshot.getKey());
+                double totalExpenses = transactionsAdapter.totalExpenses();
+                double splitExpense = Math.ceil(totalExpenses/groupNumber*100)/100;
+                tvNumberOfMembers.setText("Number of members in group: "+ groupNumber);
+                tvTotalExpense.setText("Total expense: $" + String.format("%.2f",totalExpenses));
+                tvTotalPerMember.setText("Amount each person needs to pay: $" +
+                        String.format("%.2f", splitExpense));
             }
 
             @Override
@@ -102,6 +131,12 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 transactionsAdapter.removeTransactionByKey(dataSnapshot.getKey());
+                double totalExpenses = transactionsAdapter.totalExpenses();
+                double splitExpense = Math.ceil(totalExpenses/groupNumber*1000)/1000;
+                tvNumberOfMembers.setText("Number of members in group: "+ groupNumber);
+                tvTotalExpense.setText("Total expense: $" + String.format("%.2f",totalExpenses));
+                tvTotalPerMember.setText("Amount each person needs to pay: $" +
+                        String.format("%.2f", splitExpense));
             }
 
             @Override

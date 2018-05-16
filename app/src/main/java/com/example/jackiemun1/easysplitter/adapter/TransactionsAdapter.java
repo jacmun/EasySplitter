@@ -50,8 +50,9 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
                 transactionList.get(holder.getAdapterPosition()).getBuyer());
         holder.tvDescription.setText("Description: " +
                 transactionList.get(holder.getAdapterPosition()).getDescription());
-        holder.tvPrice.setText("Price: $" +
-                transactionList.get(holder.getAdapterPosition()).getPrice());
+        holder.tvPrice.setText("Price: $" + String.format("%.2f",
+                        transactionList.get(holder.getAdapterPosition()).getPrice())
+                );
 
         if (transactionList.get(holder.getAdapterPosition()).getUid().equals(uId)) {
             holder.btnDelete.setOnClickListener(new View.OnClickListener() {
