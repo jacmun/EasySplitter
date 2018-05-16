@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity
     private TextView tvNumberOfMembers;
     private TextView tvTotalExpense;
     private TextView tvTotalPerMember;
+    private int groupNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,11 +93,8 @@ public class MainActivity extends AppCompatActivity
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                int groupMembers = dataSnapshot.getValue(Integer.class);
-                double totalExpenses = transactionsAdapter.totalExpenses();
-                tvNumberOfMembers.setText("Number of members in group: "+groupMembers);
-                tvTotalExpense.setText("Total expense: $" + totalExpenses);
-                tvTotalPerMember.setText("Amount each person needs to pay: $" + totalExpenses/groupMembers);
+                groupNumber = dataSnapshot.getValue(Integer.class);
+                System.out.print(groupNumber);
             }
 
             @Override
@@ -117,6 +115,12 @@ public class MainActivity extends AppCompatActivity
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Transaction newTransaction = dataSnapshot.getValue(Transaction.class);
                 transactionsAdapter.addTransaction(newTransaction, dataSnapshot.getKey());
+                double totalExpenses = transactionsAdapter.totalExpenses();
+                double splitExpense = Math.ceil(totalExpenses/groupNumber*100)/100;
+                tvNumberOfMembers.setText("Number of members in group: "+ groupNumber);
+                tvTotalExpense.setText("Total expense: $" + String.format("%.2f",totalExpenses));
+                tvTotalPerMember.setText("Amount each person needs to pay: $" +
+                        String.format("%.2f", splitExpense));
             }
 
             @Override
@@ -127,6 +131,12 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 transactionsAdapter.removeTransactionByKey(dataSnapshot.getKey());
+                double totalExpenses = transactionsAdapter.totalExpenses();
+                double splitExpense = Math.ceil(totalExpenses/groupNumber*1000)/1000;
+                tvNumberOfMembers.setText("Number of members in group: "+ groupNumber);
+                tvTotalExpense.setText("Total expense: $" + String.format("%.2f",totalExpenses));
+                tvTotalPerMember.setText("Amount each person needs to pay: $" +
+                        String.format("%.2f", splitExpense));
             }
 
             @Override
