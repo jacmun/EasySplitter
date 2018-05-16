@@ -95,16 +95,11 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     }
 
     public void deleteAll() {
-
-        int size = transactionList.size();
-        for (int i = 0; i < size; i++) {
-            notifyItemRemoved(i);
-        }
+        notifyDataSetChanged();
+        transactionKeys.clear();
+        transactionList.clear();
         FirebaseDatabase.getInstance().getReference("groups").child(group).child("transactions").
                 removeValue();
-        transactionList.clear();
-        transactionKeys.clear();
-        notifyDataSetChanged();
     }
 
     @Override

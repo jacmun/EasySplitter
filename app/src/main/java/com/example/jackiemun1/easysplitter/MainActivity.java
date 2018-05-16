@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,9 +31,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import butterknife.OnClick;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, NewTransactionDialog.TransactionHandler {
 
+    private RecyclerView recyclerViewTransactions;
     private TransactionsAdapter transactionsAdapter;
     private String group;
     private DrawerLayout drawerLayout;
@@ -41,6 +45,7 @@ public class MainActivity extends AppCompatActivity
     private TextView tvNumberOfMembers;
     private TextView tvTotalExpense;
     private TextView tvTotalPerMember;
+    private Button btnDeleteAll;
     private int groupNumber;
 
     @Override
@@ -77,7 +82,7 @@ public class MainActivity extends AppCompatActivity
 
         transactionsAdapter = new TransactionsAdapter(getApplicationContext(),
                 FirebaseAuth.getInstance().getCurrentUser().getUid(), group);
-        RecyclerView recyclerViewTransactions = (RecyclerView) findViewById(R.id.recyclerViewTransactions);
+        recyclerViewTransactions = (RecyclerView) findViewById(R.id.recyclerViewTransactions);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
@@ -103,8 +108,18 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        btnDeleteAll = findViewById(R.id.btnDeleteAll);
+        btnDeleteAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteAllItems();
+            }
+        });
+
         initTransactions();
     }
+
+
 
     private void initTransactions() {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("groups").child(group).
@@ -162,7 +177,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
+    public void deleteAllItems() {
+        transactionsAdapter.deleteAll();
+    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
