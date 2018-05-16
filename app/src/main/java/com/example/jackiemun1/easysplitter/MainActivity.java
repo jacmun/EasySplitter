@@ -1,6 +1,7 @@
 package com.example.jackiemun1.easysplitter;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,9 +15,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.jackiemun1.easysplitter.adapter.TransactionsAdapter;
 import com.example.jackiemun1.easysplitter.data.Transaction;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -25,14 +29,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, NewTransactionDialog.TransactionHandler {
 
     private TransactionsAdapter transactionsAdapter;
+    private String group;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        group = getIntent().getStringExtra("GROUP_NAME");
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -40,8 +48,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                new NewTransactionDialog().show(getFragmentManager(), "NewTransactionDialog");
             }
         });
 
@@ -55,7 +62,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         transactionsAdapter = new TransactionsAdapter(getApplicationContext(),
-                FirebaseAuth.getInstance().getCurrentUser().getUid());
+                FirebaseAuth.getInstance().getCurrentUser().getUid(), group);
         RecyclerView recyclerViewTransactions = (RecyclerView) findViewById(R.id.recyclerViewTransactions);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setReverseLayout(true);
@@ -68,8 +75,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initTransactions() {
-        String group = getIntent().getStringExtra("GROUP_NAME");
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("groups").child(group);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("groups").child(group).
+                child("transactions");
 
         ref.addChildEventListener(new ChildEventListener() {
             @Override
@@ -127,5 +134,19 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onNewTransactionCreated(Transaction newTransaction) {
+        String key = FirebaseDatabase.getInstance().getReference().child("groups").
+                child(group).child("transactions").push().getKey();
+        FirebaseDatabase.getInstance().getReference().child("groups").
+                child(group).child("transactions").child(key).setValue(newTransaction).
+                addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(MainActivity.this, "Post created", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

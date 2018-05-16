@@ -26,12 +26,14 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     private List<String> transactionKeys;
     private String uId;
     private int lastPosition = -1;
+    private String group;
 
-    public TransactionsAdapter(Context context, String uId) {
+    public TransactionsAdapter(Context context, String uId, String group) {
         this.context = context;
         this.uId = uId;
         this.transactionList = new ArrayList<Transaction>();
         this.transactionKeys = new ArrayList<String>();
+        this.group = group;
     }
 
     @Override
@@ -66,9 +68,8 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     }
 
     public void removeTransaction(int index) {
-        FirebaseDatabase.getInstance().getReference("transactions").child(
+        FirebaseDatabase.getInstance().getReference("groups").child(group).child("transactions").child(
                 transactionKeys.get(index)).removeValue();
-
         transactionList.remove(index);
         transactionKeys.remove(index);
         notifyItemRemoved(index);

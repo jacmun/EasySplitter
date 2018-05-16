@@ -42,7 +42,7 @@ public class CreateGroupDialog extends DialogFragment {
         View rootView = getActivity().getLayoutInflater().inflate(R.layout.dialogue_register_group, null);
 
         etRegGroupId = rootView.findViewById(R.id.etRegGroupId);
-        etRegGroupId = rootView.findViewById(R.id.etRegGroupNumber);
+        etRegGroupNumber = rootView.findViewById(R.id.etRegGroupNumber);
 
         builder.setView(rootView);
 
