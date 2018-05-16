@@ -53,8 +53,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tvUserDisplayName = findViewById(R.id.tvUserDisplayName);
-        tvUserID = findViewById(R.id.tvUserID);
         drawerLayout = findViewById(R.id.drawer_layout);
 
         group = getIntent().getStringExtra("GROUP_NAME");
@@ -79,6 +77,11 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+        tvUserDisplayName = headerView.findViewById(R.id.tvUserDisplayName);
+        tvUserID = headerView.findViewById(R.id.tvUserID);
+        tvUserDisplayName.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        tvUserID.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
         transactionsAdapter = new TransactionsAdapter(getApplicationContext(),
                 FirebaseAuth.getInstance().getCurrentUser().getUid(), group);

@@ -18,12 +18,13 @@ import android.widget.EditText;
 public class CreateUserDialog extends DialogFragment {
 
     public interface UserHandler {
-        public void initNewUser(String email, String password);
+        public void initNewUser(String email, String password, String username);
     }
 
     private UserHandler userHandler;
     private EditText etRegEmail;
     private EditText etRegPassword;
+    private EditText etUsername;
 
 
     @Override
@@ -47,6 +48,7 @@ public class CreateUserDialog extends DialogFragment {
 
         etRegEmail = rootView.findViewById(R.id.etRegEmail);
         etRegPassword = rootView.findViewById(R.id.etRegPassword);
+        etUsername = rootView.findViewById(R.id.etUsername);
 
         builder.setView(rootView);
 
@@ -74,9 +76,13 @@ public class CreateUserDialog extends DialogFragment {
                     }
                     if (TextUtils.isEmpty(etRegPassword.getText())) {
                         etRegPassword.setError("This field cannot be empty");
-                    } else {
+                    }
+                    if (TextUtils.isEmpty(etUsername.getText())) {
+                        etUsername.setError("This field cannot be empty");
+                    }
+                    else {
                         userHandler.initNewUser(etRegEmail.getText().toString(),
-                                etRegPassword.getText().toString());
+                                etRegPassword.getText().toString(), etUsername.getText().toString());
                         d.dismiss();
                     }
                 }

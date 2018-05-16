@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
         });
     }
 
-    public void initNewUser(String email, String password) {
+    public void initNewUser(String email, String password, final String username) {
         showProgressDialog();
 
         firebaseAuth.createUserWithEmailAndPassword(email, password).
@@ -121,7 +121,7 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
                     FirebaseUser fbUser = task.getResult().getUser();
 
                     fbUser.updateProfile(new UserProfileChangeRequest.Builder().
-                            setDisplayName(usernameFromEmail(fbUser.getEmail())).build());
+                            setDisplayName(username).build());
 
                     Toast.makeText(LoginActivity.this, "User created", Toast.LENGTH_SHORT).show();
                 } else {

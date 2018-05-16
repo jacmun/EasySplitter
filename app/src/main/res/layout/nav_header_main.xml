@@ -15,10 +15,19 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:srcCompat="@drawable/money_sign" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="EasySplitter"
+        android:layout_gravity="center_horizontal"
+        android:textSize="15sp"
+        android:textColor="#FF045B6D"/>
 
     <TextView
         android:id = "@+id/tvUserDisplayName"
