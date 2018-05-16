@@ -74,7 +74,6 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
         ).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                hideProgressDialog();
                 if(task.isSuccessful()){
                     final String groupName = etGroupId.getText().toString();
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("groups");
@@ -82,6 +81,7 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
                     ref.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                            hideProgressDialog();
                             if(dataSnapshot.child(groupName).exists()){
                                 Intent intentMain = new Intent();
                                 intentMain.setClass(LoginActivity.this, MainActivity.class);
@@ -101,6 +101,7 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
 
                 }
                 else{
+                    hideProgressDialog();
                     Toast.makeText(LoginActivity.this, "Error: " + task.getException().getMessage(),
                             Toast.LENGTH_SHORT).show();
                 }

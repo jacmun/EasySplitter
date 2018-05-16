@@ -104,6 +104,14 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         notifyDataSetChanged();
     }
 
+    public double totalExpenses(){
+        double total = 0;
+        for (int i = 0; i < transactionList.size(); i++) {
+            total += transactionList.get(i).getPrice();
+        }
+        return total;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvBuyer;
@@ -122,4 +130,6 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
 
         }
     }
+
+
 }
