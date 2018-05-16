@@ -40,7 +40,7 @@ public class NewTransactionDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("New User");
+        builder.setTitle("New Transaction");
 
         View rootView = getActivity().getLayoutInflater().inflate(R.layout.dialog_new_transaction, null);
 
