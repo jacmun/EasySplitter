@@ -28,6 +28,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, NewTransactionDialog.TransactionHandler {
@@ -37,6 +38,9 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawerLayout;
     private TextView tvUserDisplayName;
     private TextView tvUserID;
+    private TextView tvNumberOfMembers;
+    private TextView tvTotalExpense;
+    private TextView tvTotalPerMember;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +83,27 @@ public class MainActivity extends AppCompatActivity
         recyclerViewTransactions.setLayoutManager(layoutManager);
         recyclerViewTransactions.setAdapter(transactionsAdapter);
 
+        tvNumberOfMembers = findViewById(R.id.tvNumberOfMembers);
+        tvTotalExpense = findViewById(R.id.tvTotalExpense);
+        tvTotalPerMember = findViewById(R.id.tvTotalPerMember);
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("groups").child(group).
+                child("group members");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int groupMembers = dataSnapshot.getValue(Integer.class);
+                double totalExpenses = transactionsAdapter.totalExpenses();
+                tvNumberOfMembers.setText("Number of members in group: "+groupMembers);
+                tvTotalExpense.setText("Total expense: $" + totalExpenses);
+                tvTotalPerMember.setText("Amount each person needs to pay: $" + totalExpenses/groupMembers);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         initTransactions();
     }
