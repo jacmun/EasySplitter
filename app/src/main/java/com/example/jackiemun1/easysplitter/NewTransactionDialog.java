@@ -64,26 +64,34 @@ public class NewTransactionDialog extends DialogFragment {
         super.onResume();
         final android.support.v7.app.AlertDialog d = (android.support.v7.app.AlertDialog) getDialog();
         if (d != null) {
-            Button positiveButton = (Button) d.getButton(Dialog.BUTTON_POSITIVE);
-            positiveButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (TextUtils.isEmpty(etTransactionDes.getText())) {
-                        etTransactionDes.setError(getString(R.string.emptyFieldMsg));
-                    }
-                    if (TextUtils.isEmpty(etTransactionPrice.getText())) {
-                        etTransactionPrice.setError(getString(R.string.emptyFieldMsg));
-                    } else {
-                        Transaction newTransaction = new Transaction(
-                                Double.parseDouble(etTransactionPrice.getText().toString()),
-                                etTransactionDes.getText().toString(),
-                                FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
-                                FirebaseAuth.getInstance().getCurrentUser().getUid());
-                        transactionHandler.onNewTransactionCreated(newTransaction);
-                        d.dismiss();
-                    }
-                }
-            });
+            setUpPositiveButton(d);
         }
+    }
+
+    private void setUpPositiveButton(final AlertDialog d) {
+        Button positiveButton = (Button) d.getButton(Dialog.BUTTON_POSITIVE);
+        positiveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(etTransactionDes.getText())) {
+                    etTransactionDes.setError(getString(R.string.emptyFieldMsg));
+                }
+                if (TextUtils.isEmpty(etTransactionPrice.getText())) {
+                    etTransactionPrice.setError(getString(R.string.emptyFieldMsg));
+                } else {
+                    addTransaction(d);
+                }
+            }
+        });
+    }
+
+    private void addTransaction(AlertDialog d) {
+        Transaction newTransaction = new Transaction(
+                Double.parseDouble(etTransactionPrice.getText().toString()),
+                etTransactionDes.getText().toString(),
+                FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),
+                FirebaseAuth.getInstance().getCurrentUser().getUid());
+        transactionHandler.onNewTransactionCreated(newTransaction);
+        d.dismiss();
     }
 }

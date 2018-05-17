@@ -53,14 +53,35 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
+        setUpGroup();
 
+        Toolbar toolbar = setUpToolbar();
+
+        setUpFab();
+
+        setUpDrawer(toolbar);
+
+        setUpRecyclerView();
+
+        setUpInfoBar();
+
+        setUpDeleteAll();
+
+        initTransactions();
+    }
+
+    private void setUpGroup() {
         group = getIntent().getStringExtra(getString(R.string.groupName));
         setTitle(group);
+    }
 
+    private Toolbar setUpToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        return toolbar;
+    }
 
+    private void setUpFab() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,30 +89,19 @@ public class MainActivity extends AppCompatActivity
                 new NewTransactionDialog().show(getFragmentManager(), getString(R.string.newTransactionDialog));
             }
         });
+    }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+    private void setUpDeleteAll() {
+        btnDeleteAll = findViewById(R.id.btnDeleteAll);
+        btnDeleteAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteAllItems();
+            }
+        });
+    }
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        View headerView = navigationView.getHeaderView(0);
-        tvUserDisplayName = headerView.findViewById(R.id.tvUserDisplayName);
-        tvUserID = headerView.findViewById(R.id.tvUserID);
-        tvUserDisplayName.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-        tvUserID.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-
-        transactionsAdapter = new TransactionsAdapter(getApplicationContext(),
-                FirebaseAuth.getInstance().getCurrentUser().getUid(), group);
-        recyclerViewTransactions = (RecyclerView) findViewById(R.id.recyclerViewTransactions);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
-        recyclerViewTransactions.setLayoutManager(layoutManager);
-        recyclerViewTransactions.setAdapter(transactionsAdapter);
-
+    private void setUpInfoBar() {
         tvNumberOfMembers = findViewById(R.id.tvNumberOfMembers);
         tvTotalExpense = findViewById(R.id.tvTotalExpense);
         tvTotalPerMember = findViewById(R.id.tvTotalPerMember);
@@ -110,18 +120,39 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-
-        btnDeleteAll = findViewById(R.id.btnDeleteAll);
-        btnDeleteAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteAllItems();
-            }
-        });
-
-        initTransactions();
     }
 
+    private void setUpRecyclerView() {
+        transactionsAdapter = new TransactionsAdapter(getApplicationContext(),
+                FirebaseAuth.getInstance().getCurrentUser().getUid(), group);
+        recyclerViewTransactions = (RecyclerView) findViewById(R.id.recyclerViewTransactions);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        recyclerViewTransactions.setLayoutManager(layoutManager);
+        recyclerViewTransactions.setAdapter(transactionsAdapter);
+    }
+
+    private void setUpDrawer(Toolbar toolbar) {
+        drawerLayout = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        setUpDrawerHeader();
+    }
+
+    private void setUpDrawerHeader() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+        tvUserDisplayName = headerView.findViewById(R.id.tvUserDisplayName);
+        tvUserID = headerView.findViewById(R.id.tvUserID);
+        tvUserDisplayName.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        tvUserID.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+    }
 
 
     private void initTransactions() {
@@ -131,13 +162,7 @@ public class MainActivity extends AppCompatActivity
         ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Transaction newTransaction = dataSnapshot.getValue(Transaction.class);
-                transactionsAdapter.addTransaction(newTransaction, dataSnapshot.getKey());
-                double totalExpenses = transactionsAdapter.totalExpenses();
-                double splitExpense = Math.ceil(totalExpenses/groupNumber*100)/100;
-                tvTotalExpense.setText(getString(R.string.totalExpense) + String.format(getString(R.string.decimalSymbol),totalExpenses));
-                tvTotalPerMember.setText(getString(R.string.amountOwed) +
-                        String.format(getString(R.string.decimalSymbol), splitExpense));
+                addTransaction(dataSnapshot);
             }
 
             @Override
@@ -147,12 +172,7 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                transactionsAdapter.removeTransactionByKey(dataSnapshot.getKey());
-                double totalExpenses = transactionsAdapter.totalExpenses();
-                double splitExpense = Math.ceil(totalExpenses/groupNumber*1000)/1000;
-                tvTotalExpense.setText(getString(R.string.totalExpense) + String.format(getString(R.string.decimalSymbol),totalExpenses));
-                tvTotalPerMember.setText(getString(R.string.amountOwed) +
-                        String.format(getString(R.string.decimalSymbol), splitExpense));
+                removeTransaction(dataSnapshot);
             }
 
             @Override
@@ -166,6 +186,25 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+    }
+
+    private void removeTransaction(DataSnapshot dataSnapshot) {
+        transactionsAdapter.removeTransactionByKey(dataSnapshot.getKey());
+        double totalExpenses = transactionsAdapter.totalExpenses();
+        double splitExpense = Math.ceil(totalExpenses/groupNumber*1000)/1000;
+        tvTotalExpense.setText(getString(R.string.totalExpense) + String.format(getString(R.string.decimalSymbol),totalExpenses));
+        tvTotalPerMember.setText(getString(R.string.amountOwed) +
+                String.format(getString(R.string.decimalSymbol), splitExpense));
+    }
+
+    private void addTransaction(DataSnapshot dataSnapshot) {
+        Transaction newTransaction = dataSnapshot.getValue(Transaction.class);
+        transactionsAdapter.addTransaction(newTransaction, dataSnapshot.getKey());
+        double totalExpenses = transactionsAdapter.totalExpenses();
+        double splitExpense = Math.ceil(totalExpenses/groupNumber*100)/100;
+        tvTotalExpense.setText(getString(R.string.totalExpense) + String.format(getString(R.string.decimalSymbol),totalExpenses));
+        tvTotalPerMember.setText(getString(R.string.amountOwed) +
+                String.format(getString(R.string.decimalSymbol), splitExpense));
     }
 
     @Override

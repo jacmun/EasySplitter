@@ -76,28 +76,7 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     final String groupName = etGroupId.getText().toString();
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(getString(R.string.groups));
-                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.child(groupName).exists()){
-                                hideProgressDialog();
-                                Intent intentMain = new Intent();
-                                intentMain.setClass(LoginActivity.this, MainActivity.class);
-                                intentMain.putExtra(getString(R.string.groupName), groupName);
-                                startActivity(intentMain);
-                            }
-                            else{
-                                hideProgressDialog();
-                                Toast.makeText(LoginActivity.this, R.string.noGroupMsg, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
+                    loginToGroup(groupName);
 
                 }
                 else{
@@ -107,6 +86,35 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
                 }
             }
         });
+    }
+
+    private void loginToGroup(final String groupName) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(getString(R.string.groups));
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                makeSureGroupExists(dataSnapshot, groupName);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void makeSureGroupExists(DataSnapshot dataSnapshot, String groupName) {
+        if(dataSnapshot.child(groupName).exists()){
+            hideProgressDialog();
+            Intent intentMain = new Intent();
+            intentMain.setClass(LoginActivity.this, MainActivity.class);
+            intentMain.putExtra(getString(R.string.groupName), groupName);
+            startActivity(intentMain);
+        }
+        else{
+            hideProgressDialog();
+            Toast.makeText(LoginActivity.this, R.string.noGroupMsg, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void initNewUser(String email, String password, final String username) {

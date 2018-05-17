@@ -61,27 +61,31 @@ public class CreateGroupDialog extends DialogFragment {
         super.onResume();
         final android.support.v7.app.AlertDialog d = (android.support.v7.app.AlertDialog) getDialog();
         if (d != null) {
-            Button positiveButton = (Button) d.getButton(Dialog.BUTTON_POSITIVE);
-            positiveButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!TextUtils.isEmpty(etRegGroupId.getText())) {
-                        if(TextUtils.isEmpty(etRegGroupNumber.getText())){
-                            groupHandler.onNewGroupCreated(etRegGroupId.getText().toString(), 1);
-                        }
-                        else {
-                            int groupNumber = Integer.parseInt(etRegGroupNumber.getText().toString());
-                            groupHandler.onNewGroupCreated(etRegGroupId.getText().toString(), groupNumber);
-                        }
-                        d.dismiss();
-
-                    } else {
-                        etRegGroupId.setError(getString(R.string.emptyFieldMsg));
-                    }
-
-                }
-            });
+            createPositiveButton(d);
         }
     }
+
+    private void createPositiveButton(final AlertDialog d) {
+        Button positiveButton = (Button) d.getButton(Dialog.BUTTON_POSITIVE);
+        positiveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(etRegGroupId.getText())) {
+                    if(TextUtils.isEmpty(etRegGroupNumber.getText())){
+                        groupHandler.onNewGroupCreated(etRegGroupId.getText().toString(), 1);
+                    }
+                    else {
+                        int groupNumber = Integer.parseInt(etRegGroupNumber.getText().toString());
+                        groupHandler.onNewGroupCreated(etRegGroupId.getText().toString(), groupNumber);
+                    }
+                    d.dismiss();
+                } else {
+                    etRegGroupId.setError(getString(R.string.emptyFieldMsg));
+                }
+
+            }
+        });
+    }
+
 
 }

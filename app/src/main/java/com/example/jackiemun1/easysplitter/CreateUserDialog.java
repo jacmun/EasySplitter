@@ -67,27 +67,31 @@ public class CreateUserDialog extends DialogFragment {
         super.onResume();
         final android.support.v7.app.AlertDialog d = (android.support.v7.app.AlertDialog) getDialog();
         if (d != null) {
-            Button positiveButton = (Button) d.getButton(Dialog.BUTTON_POSITIVE);
-            positiveButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (TextUtils.isEmpty(etRegEmail.getText())) {
-                        etRegEmail.setError(getString(R.string.emptyFieldMsg));
-                    }
-                    if (TextUtils.isEmpty(etRegPassword.getText())) {
-                        etRegPassword.setError(getString(R.string.emptyFieldMsg));
-                    }
-                    if (TextUtils.isEmpty(etUsername.getText())) {
-                        etUsername.setError(getString(R.string.emptyFieldMsg));
-                    }
-                    else {
-                        userHandler.initNewUser(etRegEmail.getText().toString(),
-                                etRegPassword.getText().toString(), etUsername.getText().toString());
-                        d.dismiss();
-                    }
-                }
-            });
+            getPositiveButton(d);
         }
+    }
+
+    private void getPositiveButton(final AlertDialog d) {
+        Button positiveButton = (Button) d.getButton(Dialog.BUTTON_POSITIVE);
+        positiveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(etRegEmail.getText())) {
+                    etRegEmail.setError(getString(R.string.emptyFieldMsg));
+                }
+                if (TextUtils.isEmpty(etRegPassword.getText())) {
+                    etRegPassword.setError(getString(R.string.emptyFieldMsg));
+                }
+                if (TextUtils.isEmpty(etUsername.getText())) {
+                    etUsername.setError(getString(R.string.emptyFieldMsg));
+                }
+                else {
+                    userHandler.initNewUser(etRegEmail.getText().toString(),
+                            etRegPassword.getText().toString(), etUsername.getText().toString());
+                    d.dismiss();
+                }
+            }
+        });
     }
 
 }
