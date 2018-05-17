@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference(getString(R.string.groups)).child(group).
                 child(getString(R.string.groupMembers));
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 groupNumber = dataSnapshot.getValue(Integer.class);

@@ -35,7 +35,7 @@
     <string name="totalExpense">Total expense: $</string>
     <string name="amountOwed">Amount each person needs to pay: $</string>
     <string name="emptyBody">StatementWithEmptyBody</string>
-    <string name="aboutMsg">Users can add group expenses and EasySplitter will keep a running total of all expenses and how much each member of the group has to pay.</string>
+    <string name="aboutMsg">Users can add group expenses and EasySplitter will keep a running total of all expenses.</string>
     <string name="runtimeException3">The Activity does not implement the TransactionHandler interface</string>
     <string name="newTransaction">New Transaction</string>
     <string name="easysplitter">EasySplitter</string>

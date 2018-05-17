@@ -54,16 +54,23 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
                         transactionList.get(holder.getAdapterPosition()).getPrice())
                 );
 
-        if (transactionList.get(holder.getAdapterPosition()).getUid().equals(uId)) {
-            holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+//        if (transactionList.get(holder.getAdapterPosition()).getUid().equals(uId)) {
+//            holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    removeTransaction(holder.getAdapterPosition());
+//                }
+//            });
+//        } else {
+//            holder.btnDelete.setVisibility(View.GONE);
+//        }
+
+        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     removeTransaction(holder.getAdapterPosition());
                 }
             });
-        } else {
-            holder.btnDelete.setVisibility(View.GONE);
-        }
 
         setAnimation(holder.itemView, position);
     }
