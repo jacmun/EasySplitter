@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     final String groupName = etGroupId.getText().toString();
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("groups");
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(getString(R.string.groups));
                     ref.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -84,12 +84,12 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
                                 hideProgressDialog();
                                 Intent intentMain = new Intent();
                                 intentMain.setClass(LoginActivity.this, MainActivity.class);
-                                intentMain.putExtra("GROUP_NAME", groupName);
+                                intentMain.putExtra(getString(R.string.groupName), groupName);
                                 startActivity(intentMain);
                             }
                             else{
                                 hideProgressDialog();
-                                Toast.makeText(LoginActivity.this, "Group does not exist", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, R.string.noGroupMsg, Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -123,7 +123,7 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
                     fbUser.updateProfile(new UserProfileChangeRequest.Builder().
                             setDisplayName(username).build());
 
-                    Toast.makeText(LoginActivity.this, "User created", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, R.string.userCreated, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(LoginActivity.this,
                             task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -136,17 +136,17 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
 
     public void onNewGroupCreated(final String groupName,final int groupNumber){
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("groups");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(getString(R.string.groups));
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.child(groupName).exists()) {
-                    Toast.makeText(LoginActivity.this, "Group ID already taken", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, R.string.takenGroupId, Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.d("CREATE_GROUP", "here");
-                    FirebaseDatabase.getInstance().getReference().child("groups").
-                            child(groupName).child("group members").setValue(groupNumber);
+                    Log.d(getString(R.string.createGroup), getString(R.string.here));
+                    FirebaseDatabase.getInstance().getReference().child(getString(R.string.groups)).
+                            child(groupName).child(getString(R.string.groupMembers)).setValue(groupNumber);
                 }
             }
             @Override
@@ -158,12 +158,12 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
 
     private boolean isFormValid() {
         if (TextUtils.isEmpty(etEmail.getText().toString())) {
-            etEmail.setError("Required");
+            etEmail.setError(getString(R.string.required));
             return false;
         }
 
         if (TextUtils.isEmpty(etPassword.getText().toString())) {
-            etPassword.setError("Required");
+            etPassword.setError(getString(R.string.required));
             return false;
         }
 
@@ -172,18 +172,18 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
 
 
     private void showRegisterUserDialog() {
-        new CreateUserDialog().show(getFragmentManager(), "RegisterUserDialog");
+        new CreateUserDialog().show(getFragmentManager(), getString(R.string.registerUser));
     }
 
     private void showRegisterGroupDialog() {
-        new CreateGroupDialog().show(getFragmentManager(), "RegisterGroupDialog");
+        new CreateGroupDialog().show(getFragmentManager(), getString(R.string.registerGroup));
     }
 
 
     public void showProgressDialog() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("Loading...");
+            progressDialog.setMessage(getString(R.string.loadingMsg));
         }
 
         progressDialog.show();
@@ -196,8 +196,8 @@ public class LoginActivity extends AppCompatActivity implements CreateUserDialog
     }
 
     private String usernameFromEmail(String email) {
-        if (email.contains("@")) {
-            return email.split("@")[0];
+        if (email.contains(getString(R.string.atSymbol))) {
+            return email.split(getString(R.string.atSymbol))[0];
         } else {
             return email;
         }

@@ -34,7 +34,7 @@ public class CreateUserDialog extends DialogFragment {
         if (context instanceof UserHandler) {
             userHandler = (UserHandler) context;
         } else {
-            throw new RuntimeException("The Activity does not implement the UserHandler interface");
+            throw new RuntimeException(getString(R.string.runtimeException2));
         }
     }
 
@@ -42,7 +42,7 @@ public class CreateUserDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("New User");
+        builder.setTitle(R.string.newUser);
 
         View rootView = getActivity().getLayoutInflater().inflate(R.layout.dialogue_register_user, null);
 
@@ -52,7 +52,7 @@ public class CreateUserDialog extends DialogFragment {
 
         builder.setView(rootView);
 
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -72,13 +72,13 @@ public class CreateUserDialog extends DialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (TextUtils.isEmpty(etRegEmail.getText())) {
-                        etRegEmail.setError("This field cannot be empty");
+                        etRegEmail.setError(getString(R.string.emptyFieldMsg));
                     }
                     if (TextUtils.isEmpty(etRegPassword.getText())) {
-                        etRegPassword.setError("This field cannot be empty");
+                        etRegPassword.setError(getString(R.string.emptyFieldMsg));
                     }
                     if (TextUtils.isEmpty(etUsername.getText())) {
-                        etUsername.setError("This field cannot be empty");
+                        etUsername.setError(getString(R.string.emptyFieldMsg));
                     }
                     else {
                         userHandler.initNewUser(etRegEmail.getText().toString(),

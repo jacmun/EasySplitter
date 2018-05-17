@@ -32,7 +32,7 @@ public class NewTransactionDialog extends DialogFragment {
         if (context instanceof TransactionHandler) {
             transactionHandler = (TransactionHandler) context;
         } else {
-            throw new RuntimeException("The Activity does not implement the TransactionHandler interface");
+            throw new RuntimeException(getString(R.string.runtimeException3));
         }
     }
 
@@ -40,7 +40,7 @@ public class NewTransactionDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("New Transaction");
+        builder.setTitle(R.string.newTransaction);
 
         View rootView = getActivity().getLayoutInflater().inflate(R.layout.dialog_new_transaction, null);
 
@@ -49,7 +49,7 @@ public class NewTransactionDialog extends DialogFragment {
 
         builder.setView(rootView);
 
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -69,10 +69,10 @@ public class NewTransactionDialog extends DialogFragment {
                 @Override
                 public void onClick(View v) {
                     if (TextUtils.isEmpty(etTransactionDes.getText())) {
-                        etTransactionDes.setError("This field cannot be empty");
+                        etTransactionDes.setError(getString(R.string.emptyFieldMsg));
                     }
                     if (TextUtils.isEmpty(etTransactionPrice.getText())) {
-                        etTransactionPrice.setError("This field cannot be empty");
+                        etTransactionPrice.setError(getString(R.string.emptyFieldMsg));
                     } else {
                         Transaction newTransaction = new Transaction(
                                 Double.parseDouble(etTransactionPrice.getText().toString()),

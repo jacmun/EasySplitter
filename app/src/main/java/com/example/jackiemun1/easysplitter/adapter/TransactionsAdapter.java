@@ -48,9 +48,9 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.tvBuyer.setText(
                 transactionList.get(holder.getAdapterPosition()).getBuyer());
-        holder.tvDescription.setText("Description: " +
+        holder.tvDescription.setText(context.getString(R.string.description) +
                 transactionList.get(holder.getAdapterPosition()).getDescription());
-        holder.tvPrice.setText("Price: $" + String.format("%.2f",
+        holder.tvPrice.setText(context.getString(R.string.price) + String.format(context.getString(R.string.decimalSymbol),
                         transactionList.get(holder.getAdapterPosition()).getPrice())
                 );
 
@@ -69,8 +69,9 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     }
 
     public void removeTransaction(int index) {
-        FirebaseDatabase.getInstance().getReference("groups").child(group).child("transactions").child(
-                transactionKeys.get(index)).removeValue();
+        FirebaseDatabase.getInstance().getReference(context.getString(R.string.groups)).child(group).
+                child(context.getString(R.string.transactions)).
+                child(transactionKeys.get(index)).removeValue();
         transactionList.remove(index);
         transactionKeys.remove(index);
         notifyItemRemoved(index);
@@ -98,8 +99,8 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         notifyDataSetChanged();
         transactionKeys.clear();
         transactionList.clear();
-        FirebaseDatabase.getInstance().getReference("groups").child(group).child("transactions").
-                removeValue();
+        FirebaseDatabase.getInstance().getReference(context.getString(R.string.groups)).child(group).
+                child(context.getString(R.string.transactions)).removeValue();
     }
 
     @Override

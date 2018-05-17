@@ -29,7 +29,7 @@ public class CreateGroupDialog extends DialogFragment {
         if (context instanceof CreateGroupDialog.GroupHandler) {
             groupHandler = (CreateGroupDialog.GroupHandler) context;
         } else {
-            throw new RuntimeException("The Activity does not implement the GroupHandler interface");
+            throw new RuntimeException(getString(R.string.runtimeException));
         }
     }
 
@@ -37,7 +37,7 @@ public class CreateGroupDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("New Group");
+        builder.setTitle(R.string.newGroup);
 
         View rootView = getActivity().getLayoutInflater().inflate(R.layout.dialogue_register_group, null);
 
@@ -46,7 +46,7 @@ public class CreateGroupDialog extends DialogFragment {
 
         builder.setView(rootView);
 
-        builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -76,7 +76,7 @@ public class CreateGroupDialog extends DialogFragment {
                         d.dismiss();
 
                     } else {
-                        etRegGroupId.setError("This field cannot be empty");
+                        etRegGroupId.setError(getString(R.string.emptyFieldMsg));
                     }
 
                 }

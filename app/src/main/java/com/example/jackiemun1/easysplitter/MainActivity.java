@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
-        group = getIntent().getStringExtra("GROUP_NAME");
+        group = getIntent().getStringExtra(getString(R.string.groupName));
         setTitle(group);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new NewTransactionDialog().show(getFragmentManager(), "NewTransactionDialog");
+                new NewTransactionDialog().show(getFragmentManager(), getString(R.string.newTransactionDialog));
             }
         });
 
@@ -96,13 +96,13 @@ public class MainActivity extends AppCompatActivity
         tvTotalExpense = findViewById(R.id.tvTotalExpense);
         tvTotalPerMember = findViewById(R.id.tvTotalPerMember);
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("groups").child(group).
-                child("group members");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(getString(R.string.groups)).child(group).
+                child(getString(R.string.groupMembers));
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 groupNumber = dataSnapshot.getValue(Integer.class);
-                tvNumberOfMembers.setText("Number of members in group: "+ groupNumber);
+                tvNumberOfMembers.setText(getString(R.string.numMembers)+ groupNumber);
             }
 
             @Override
@@ -125,8 +125,8 @@ public class MainActivity extends AppCompatActivity
 
 
     private void initTransactions() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("groups").child(group).
-                child("transactions");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(getString(R.string.groups)).child(group).
+                child(getString(R.string.transactions));
 
         ref.addChildEventListener(new ChildEventListener() {
             @Override
@@ -135,9 +135,9 @@ public class MainActivity extends AppCompatActivity
                 transactionsAdapter.addTransaction(newTransaction, dataSnapshot.getKey());
                 double totalExpenses = transactionsAdapter.totalExpenses();
                 double splitExpense = Math.ceil(totalExpenses/groupNumber*100)/100;
-                tvTotalExpense.setText("Total expense: $" + String.format("%.2f",totalExpenses));
-                tvTotalPerMember.setText("Amount each person needs to pay: $" +
-                        String.format("%.2f", splitExpense));
+                tvTotalExpense.setText(getString(R.string.totalExpense) + String.format(getString(R.string.decimalSymbol),totalExpenses));
+                tvTotalPerMember.setText(getString(R.string.amountOwed) +
+                        String.format(getString(R.string.decimalSymbol), splitExpense));
             }
 
             @Override
@@ -150,9 +150,9 @@ public class MainActivity extends AppCompatActivity
                 transactionsAdapter.removeTransactionByKey(dataSnapshot.getKey());
                 double totalExpenses = transactionsAdapter.totalExpenses();
                 double splitExpense = Math.ceil(totalExpenses/groupNumber*1000)/1000;
-                tvTotalExpense.setText("Total expense: $" + String.format("%.2f",totalExpenses));
-                tvTotalPerMember.setText("Amount each person needs to pay: $" +
-                        String.format("%.2f", splitExpense));
+                tvTotalExpense.setText(getString(R.string.totalExpense) + String.format(getString(R.string.decimalSymbol),totalExpenses));
+                tvTotalPerMember.setText(getString(R.string.amountOwed) +
+                        String.format(getString(R.string.decimalSymbol), splitExpense));
             }
 
             @Override
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity
             finish();
         }
         if (id == R.id.nav_about) {
-            showSnackBarMessage("HariniPoo & JackiePoo");
+            showSnackBarMessage(getString(R.string.aboutMsg));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

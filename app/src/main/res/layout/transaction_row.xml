@@ -35,7 +35,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="5dp"
                 android:textSize="18sp"
-                android:text="Buyer"
+                android:text="@string/buyer"
                 android:textColor="#000000"
                 android:textStyle="bold"/>
 
@@ -44,16 +44,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
+                android:layout_marginRight="118dp"
                 android:textSize="15sp"
                 android:textColor="#000000"
-                android:text="Description" />
+                android:text="@string/tvDescription" />
 
             <TextView
                 android:id="@+id/tvPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="Price"
+                android:text="@string/priceXML"
                 android:textSize="15sp"
                 android:textColor="#000000"/>
 
@@ -63,7 +64,7 @@
             android:id="@+id/btnDelete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delete"
+            android:text="@string/delete"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"/>

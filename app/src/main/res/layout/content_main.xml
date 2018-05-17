@@ -30,7 +30,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="#000000"
                     android:textSize="15sp"
-                    android:text="Number of members in the group" />
+                    android:text="@string/number_of_members_in_the_group" />
 
                 <TextView
                     android:id="@+id/tvTotalExpense"
@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="#000000"
                     android:textSize="15sp"
-                    android:text="Total expenses: " />
+                    android:text="@string/total_expenses" />
 
                 <TextView
                     android:id="@+id/tvTotalPerMember"
@@ -46,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="#000000"
                     android:textSize="15sp"
-                    android:text="Amount each user needs to pay:" />
+                    android:text="@string/amount_each_user_needs_to_pay" />
 
 
             </LinearLayout>
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:backgroundTint="#057289"
-            android:text="Delete all expenses"
+            android:text="@string/delete_all_expenses"
             android:textColor="#baf0f8"/>
 
     </LinearLayout>
